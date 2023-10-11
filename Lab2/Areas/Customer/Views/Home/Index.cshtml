@@ -1,0 +1,66 @@
+﻿@model List<Product>
+@{
+    ViewData["title"] = "Home page";
+}
+<div class="row mt-2">
+    <div class="col-md-6">
+        <form asp-action="Search">
+            <div class="row">
+                <div class="col-md-8">
+                    <input name="name" type="search" class="form-control" placeholder="Sreach" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-2">
+    @foreach (var x in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-2 product-item">
+                <div class="card-header">@x.Name</div>
+                <div class="card-body text-center">
+                    <a asp-action="Detail" asp-route-id="@x.Id" asp-route-page="@ViewBag.PageIndex"><img src="/@x.ImageUrl" /></a>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            Price <span class="text-light">@x.Price USD</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="Detail" asp-route-id="@x.Id" asp-route-page="@ViewBag.PageIndex" class="btn btn-secondary"><i class="bi bi-search"></i> Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+</div>
+
+<div>
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item @(ViewBag.PageIndex==1?"disabled":"")">
+            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+        </li>
+        @for (int i = 1; i <= ViewBag.PageSum; i++)
+        {
+            <li class="page-item @(ViewBag.PageIndex==i?"active":"")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(ViewBag.PageIndex==ViewBag.PageSum?"disabled":"")">
+            <a class="page-link" asp-action="Index" asp-route-page="@ViewBag.PageSum">&raquo;</a>
+        </li>
+    </ul>
+</div>
+
+<partial name="_Notifications" />

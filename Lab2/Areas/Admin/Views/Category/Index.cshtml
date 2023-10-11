@@ -1,0 +1,58 @@
+﻿@model List<Category>
+
+<div class="row">
+    <div class="col-md-9">
+        <h1>LIST CATEGORY</h1>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Create" class="mt-1 btn btn-secondary"><i class="bi bi-plus-circle"></i> Create new category</a>
+    </div>
+
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#Id</th>
+            <th>Name</th>
+            <th>Display</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var x in Model)
+        {
+            <tr>
+                <td>@x.Id</td>
+                <td>@x.Name</td>
+                <td>@x.DisplayOrder</td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@x.Id" class="btn btn-success"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <a onclick=Delete("/Admin/category/delete/@x.Id") class="btn btn-outline-danger"><i class="bi bi-x-circle"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<partial name="_Notifications"/>
+@section Scripts{
+    <script>
+        function Delete(url) {
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.replace(url);
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+        }
+
+    </script>
+}

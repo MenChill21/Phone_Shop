@@ -1,0 +1,64 @@
+﻿@model Product
+
+<h2>Product</h2>
+<hr />
+<form asp-action="Edit" asp-route-page="@ViewBag.Page" asp-route-nameF="@ViewBag.Name" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-3">
+            @if (Model.ImageUrl != null)
+            {
+                <img src="/@Model.ImageUrl" style="width: 300px" />
+            }
+        </div>
+        <div class="col-md-9">
+            <input asp-for="Id" hidden="true"/>
+            <div class="form-group">
+                <label>Name</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea asp-for="Description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Price</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Category</label>
+                <select asp-for="CategoryId" asp-items="@ViewBag.ListCategory" class="form-control text-dark">
+                    <option disabled selected>--choose category</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Image</label>
+                <input type="file" id="image" name="image" class="form-control" />
+            </div>
+            <br />
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a asp-action="Search" asp-route-name="@ViewBag.Name" asp-route-page="@ViewBag.Page" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+
+</form>
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+    tinymce.init({
+        selector: 'textarea',
+        plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+        toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+        tinycomments_mode: 'embedded',
+        tinycomments_author: 'Author name',
+        mergetags_list: [
+          { value: 'First.Name', title: 'First Name' },
+          { value: 'Email', title: 'Email' },
+        ],
+        ai_request: (request, respondWith) => respondWith.string(() => Promise.reject("See docs to implement AI Assistant"))
+    });
+    </script>
+}

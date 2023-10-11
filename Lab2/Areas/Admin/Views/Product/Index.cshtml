@@ -1,0 +1,95 @@
+﻿@model List<Product>
+<partial name="_Notifications" />
+
+<h1 class="mt-2">LIST PRODUCT</h1>
+
+<div class="row mt-2">
+    <div class="col-md-9">
+        <form asp-action="Search">
+            <div class="row">
+                <div class="col-md-8">
+                    <input name="name" type="search" class="form-control" placeholder="Sreach" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <a asp-action="Create" class="mt-1 btn btn-secondary"><i class="bi bi-plus-circle"></i> Create new product</a>
+    </div>
+</div>
+
+<table class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Category</th>
+            <th  class="text-center" >Image</th>
+            <th class="text-center">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var x in Model)
+        {
+            <tr  class="text-center" >
+                <td>@x.Name</td>
+                <td>@x.Price</td>
+                <td>@x.Category.Name</td>
+                <td>
+                    @if(x.ImageUrl != null)
+                    {
+                        <img src="/@x.ImageUrl" style="width:100px; height:100px; object-fit:scale-down"/>
+                    }
+                </td>
+                <td class="text-center">
+                    <a asp-action="Edit" asp-route-id="@x.Id" asp-route-page="@ViewBag.PageIndex" class="btn btn-success"><i class="bi bi-pencil-square"></i> Edit</a>
+                    <a onclick=Delete("/Admin/product/delete/@x.Id") class="btn btn-outline-danger" ><i class="bi bi-x-circle"></i> Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div>
+    <ul class="pagination justify-content-center">
+
+        <li class="page-item @(ViewBag.PageIndex==1?"disabled":"")">
+            <a class="page-link" asp-action="Index" asp-route-page="1">&laquo;</a>
+        </li>
+        @for(int i =1; i<=ViewBag.PageSum; i++)
+        {
+            <li class="page-item @(ViewBag.PageIndex==i?"active":"")">
+                <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+            </li>
+        }
+        <li class="page-item @(ViewBag.PageIndex==ViewBag.PageSum?"disabled":"")">
+            <a class="page-link" asp-action="Index" asp-route-page="@ViewBag.PageSum">&raquo;</a>
+        </li>
+    </ul>
+</div>
+@section Scripts{ 
+    <script>
+        function Delete(url) {
+            Swal.fire({
+                title: 'Do you want to save the changes?',
+                showDenyButton: true,              
+                confirmButtonText: 'Yes',
+                denyButtonText: `No`,
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
+                    window.location.replace(url);
+                } else if (result.isDenied) {
+                    Swal.fire('Changes are not saved', '', 'info')
+                }
+            })
+        }
+   
+    </script>
+}

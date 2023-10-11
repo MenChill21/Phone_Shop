@@ -1,0 +1,50 @@
+﻿@model List<Product>
+@{
+    ViewData["title"] = "Search";
+}
+<div class="row mt-2">
+    <div class="col-md-6">
+        <form asp-action="Search">
+            <div class="row">
+                <div class="col-md-8">
+                    <input name="name" value="@ViewBag.Name" type="search" class="form-control" placeholder="Sreach" />
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-search"></i> Search
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row mt-2">
+    @foreach (var x in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-2 product-item">
+                <div class="card-header">@x.Name</div>
+                <div class="card-body text-center">
+                    <a asp-action="Detail" asp-route-id="@x.Id" asp-route-name="@ViewBag.Name"><img src="/@x.ImageUrl" /></a>
+                </div>
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-6">
+                            Price <span class="text-light">@x.Price USD</span>
+                        </div>
+                        <div class="col-6 text-end">
+                            <a asp-action="Detail" asp-route-id="@x.Id" asp-route-name="@ViewBag.Name" class="btn btn-secondary"><i class="bi bi-search"></i> Detail</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+
+</div>
+
+
+
+<partial name="_Notifications" />
